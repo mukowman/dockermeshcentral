@@ -1,7 +1,8 @@
 FROM node:7
-WORKDIR /app
-RUN npm install meshcentral
-CMD node meshcentral --notls --port 80
-EXPOSE 80
-EXPOSE 4433
-VOLUME /app
+ENV MC2_INSTALL_PATH /opt/meshcentral
+RUN mkdir -p ${MC2_INSTALL_PATH} && \
+    cd ${MC2_INSTALL_PATH} && \
+    npm install meshcentral
+ENTRYPOINT ["node", "/opt/meshcentral/node_modules/meshcentral/meshcentral", "--notls", "--port 8001", "--mpsport 8002"]
+EXPOSE 8001 8002
+VOLUME /opt/meshcentral
