@@ -1,7 +1,7 @@
 FROM node:6.11-alpine
 
 COPY startmeshcentral.sh /
-RUN adduser --quiet meshserver \
+RUN adduser meshserver \
     && mkdir -p /home/meshserver/meshcentral-data \
     && chmod +x /startmeshcentral.sh
 COPY package.json /home/meshserver/
