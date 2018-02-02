@@ -1,10 +1,19 @@
 FROM node:6.11-alpine
 
-ENV MC2_INSTALL_PATH /opt/meshcentral
+COPY startmeshcentral.sh /
+RUN adduser --quiet meshserver \
+    && mkdir -p /home/meshserver/meshcentral-data \
+    && chmod +x /startmeshcentral.sh
+COPY package.json /home/meshserver/
+COPY config.json /home/meshserver/meshcentral-data/
+RUN su - meshserver \
+	&& cd /home/meshserver \
+    && npm install github:Ylianst/MeshCentral
+    
+ENV PORT 443  
+ENV REDIRPORT 80  
+ENV MPSPORT 4443
 
-RUN mkdir -p ${MC2_INSTALL_PATH} && \
-    cd ${MC2_INSTALL_PATH} && \
-    npm install meshcentral
-EXPOSE 80 443 4433
-VOLUME /opt/meshcentral/node_modules/
-ENTRYPOINT ["node", "/opt/meshcentral/node_modules/meshcentral/meshcentral", "--tlsoffload"]
+EXPOSE 80 443 4443
+
+ENTRYPOINT ["/startmeshcentral.sh"]
