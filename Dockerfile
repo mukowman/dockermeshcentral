@@ -1,13 +1,11 @@
 FROM node:6.11-alpine
 
 COPY startmeshcentral.sh /
-RUN adduser meshserver \
-    && mkdir -p /home/meshserver/meshcentral-data \
+RUN mkdir -p /home/meshserver/meshcentral-data \
     && chmod +x /startmeshcentral.sh
 COPY package.json /home/meshserver/
 COPY config.json /home/meshserver/meshcentral-data/
-RUN su - meshserver \
-	&& cd /home/meshserver \
+RUN cd /home/meshserver \
     && npm install github:Ylianst/MeshCentral
     
 ENV PORT 443  
